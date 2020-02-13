@@ -32,7 +32,7 @@ data3 = read.csv("http://politicaldatascience.com/PDS/Problem%20Sets/Problem%20S
 
 vote.choice = function(candidate) {
   #
-  #Gives the number of people who voted for a given candidate.
+  #Provides the number of people who voted for a given candidate.
   #Inputs: candidate - (string) Candidate name; 'Trump', 'Clinton', or 'Other'
   #Outputs: NULL if invalid candidate name
   #         (numeric) Number of rows in data3 where candidate was given as answer for pres16 column
@@ -55,9 +55,9 @@ library('fivethirtyeight')
 
 appoint = function(president) {
   #
-  #Gives the proportion of time cabinet appointees spent under a given president
-  #Input: president - (string) President name since Carter
-  #Returns: NULL if invalid president name (prints a list of valid presidents)
+  #Provides the proportion of time cabinet appointees spent under a given president
+  #Inputs: president - (string) President name since Carter
+  #Outputs: NULL if invalid president name (prints a list of valid presidents)
   #         (numeric) Proportion of time averaged accross appointees 
   #
   valid_presidents = c("Carter","Reagan","Bush 41","Clinton","Bush 43","Obama","Trump")
@@ -69,6 +69,45 @@ appoint = function(president) {
     NULL
   }
   else {
-    return(mean(cabinet_turnover[cabinet_turnover$president == president,]$length, na.rm = T)/pres_terms[which(valid_presidents == president)])
+    return(mean(cabinet_turnover[cabinet_turnover$president == president,]$length, na.rm = T)/
+             pres_terms[which(valid_presidents == president)])
+  }
+}
+
+
+#Q5
+library('fivethirtyeight')
+
+congress_stats = function(statstype) {
+  #
+  #Provides information about the average of congressmembers by congress or state
+  #Input: statstype - (string) Type of groupings for the average data; by "congress" or "state"
+  #Outputs: (data.frame) Dataframe of the ages with the rownames corresponding to the group (either the congress number or state)
+  #         NULL if neither "congress" nor "state" was provided as input
+  #
+  if (statstype == "congress") {
+    congresses = unique(congress_age$congress)
+    avg_age = rep(0,length(congresses)) #Initializing my age column
+    for (c in seq(length(congresses))) {
+      avg_age[c] = mean(congress_age[congress_age$congress == congresses[c],]$age)
+    }
+    ages = data.frame(avg_age)
+    rownames(ages) = congresses
+    return(ages)
+  }
+  else if (statstype == "state") {
+    states = unique(congress_age$state)
+    avg_age = rep(0,length(states)) #Initializing my age column
+    for (s in seq(length(states))) {
+      avg_age[s] = mean(congress_age[congress_age$state == states[s],]$age)
+    }
+    ages = data.frame(avg_age)
+    rownames(ages) = states
+    return(ages)
+  }
+  else {
+    print("Please enter a valid argument into the function.")
+    print("Valid Arguments: 'congress' or 'state'")
+    NULL
   }
 }
