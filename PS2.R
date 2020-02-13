@@ -33,9 +33,9 @@ data3 = read.csv("http://politicaldatascience.com/PDS/Problem%20Sets/Problem%20S
 vote.choice = function(candidate) {
   #
   #Gives the number of people who voted for a given candidate.
-  #Inputs: candidate - String as candidate name
+  #Inputs: candidate - (string) Candidate name; 'Trump', 'Clinton', or 'Other'
   #Outputs: NULL if invalid candidate name
-  #         (Int) of number of rows in data3 where candidate was given as answer for pres16 column
+  #         (numeric) Number of rows in data3 where candidate was given as answer for pres16 column
   #
   valid_candidates = c("Trump","Clinton","Other")
   if (!(candidate %in% valid_candidates)) {
@@ -50,4 +50,25 @@ vote.choice = function(candidate) {
   }
 }
 
+#Q4
+library('fivethirtyeight')
 
+appoint = function(president) {
+  #
+  #Gives the proportion of time cabinet appointees spent under a given president
+  #Input: president - (string) President name since Carter
+  #Returns: NULL if invalid president name (prints a list of valid presidents)
+  #         (numeric) Proportion of time averaged accross appointees 
+  #
+  valid_presidents = c("Carter","Reagan","Bush 41","Clinton","Bush 43","Obama","Trump")
+  pres_terms = c(1461,2922,1461,2922,2922,2922,1105)
+  if (!(president %in% valid_presidents)) {
+    print("Please enter a valid President into the function to return a valid response.")
+    print("Valid Presidents:")
+    print(valid_presidents)
+    NULL
+  }
+  else {
+    return(mean(cabinet_turnover[cabinet_turnover$president == president,]$length, na.rm = T)/pres_terms[which(valid_presidents == president)])
+  }
+}
